@@ -1,13 +1,8 @@
 from rest_framework import serializers
-from app.models import Posts
+from app.models import Posts,Upvote,Downvote
 from account.models import CustomUser
 from rest_framework.validators import ValidationError
 from rest_framework.authtoken.models import Token
-
-class PostSerilizers(serializers.ModelSerializer):
-    class Meta:
-        model = Posts
-        fields = ['id','author','content','screenshot']
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -40,3 +35,22 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
         return user
+
+
+class PostSerilizers(serializers.ModelSerializer):
+    class Meta:
+        model = Posts
+        fields = ['post_id','upvotes','downvotes','author','content','screenshot','expiration']
+
+class UpvoteSerializer(serializers.ModelSerializer):
+   
+    class Meta:
+        model =Upvote
+        fields =['post','user']
+   
+  
+
+class DownvoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =Upvote
+        fields =['post','user']
