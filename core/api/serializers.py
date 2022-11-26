@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.models import Posts,Upvote,Downvote
+from app.models import Posts,Profile
 from account.models import CustomUser
 from rest_framework.validators import ValidationError
 from rest_framework.authtoken.models import Token
@@ -32,9 +32,15 @@ class AccountSerializer(serializers.ModelSerializer):
 
         Token.objects.create(user=user)
 
-
-
         return user
+
+
+class ProfileSerilizers(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    
+    class Meta:
+        model =Profile
+        fields =['user','avater','country','club']
 
 
 class PostSerilizers(serializers.ModelSerializer):
@@ -42,15 +48,3 @@ class PostSerilizers(serializers.ModelSerializer):
         model = Posts
         fields = ['post_id','upvotes','downvotes','author','content','screenshot','expiration']
 
-class UpvoteSerializer(serializers.ModelSerializer):
-   
-    class Meta:
-        model =Upvote
-        fields =['post','user']
-   
-  
-
-class DownvoteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model =Upvote
-        fields =['post','user']

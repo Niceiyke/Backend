@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import PostSerilizers,AccountSerializer,UpvoteSerializer
-from app.models import Posts,Upvote
+from .serializers import PostSerilizers,AccountSerializer,ProfileSerilizers
+from app.models import Posts,Profile
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -46,6 +46,9 @@ class RegisterView(GenericAPIView):
         return Response(data=serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
 
+class ListCreateProfile(ListCreateAPIView):
+    queryset =Profile.objects.all()
+    serializer_class =ProfileSerilizers
 
 class ListCreatePost(ListCreateAPIView):
     queryset =Posts.objects.all()
@@ -57,20 +60,4 @@ class SinglePost(RetrieveUpdateDestroyAPIView):
     serializer_class =PostSerilizers
     lookup_fields = ['id']
 
-
-class getPostUpvote(APIView):
-    def get(self, request,pk, format=None):
-        queryset = Upvote.objects.filter(post_id=pk)
-        serializer=UpvoteSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def post(self, request,pk, format=None):
-            serializer = UpvoteSerializer(data=request.data)
-            print ('data',serializer)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    
 
