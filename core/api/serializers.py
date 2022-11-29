@@ -1,18 +1,16 @@
+from django.conf import settings
 from rest_framework import serializers
-from app.models import Posts,Upvote,Downvote
 from account.models import CustomUser
 from rest_framework.validators import ValidationError
 from rest_framework.authtoken.models import Token
-
+from social.models import Post,UserProfile,Comment
 
 class AccountSerializer(serializers.ModelSerializer):
     email =serializers.CharField(max_length=50)
-    first_name= serializers.CharField(max_length=30)
-    last_name= serializers.CharField(max_length=30)
     password =serializers.CharField(min_length=8,write_only=True)
     class Meta:
         model =CustomUser
-        fields =['email','first_name','last_name','password']
+        fields =['email','password']
 
     def validate(self,attrs):
         email_exist =CustomUser.objects.filter(email=attrs['email']).exists()
@@ -32,25 +30,41 @@ class AccountSerializer(serializers.ModelSerializer):
 
         Token.objects.create(user=user)
 
-
-
         return user
 
+class PostSerializer(serializers.ModelSerializer):
+    num_likes =serializers.SerializerMethodField(read_only=True)
+    num_dislikes  =serializers.SerializerMethodField(read_only=True)
 
-class PostSerilizers(serializers.ModelSerializer):
     class Meta:
-        model = Posts
-        fields = ['post_id','upvotes','downvotes','author','content','screenshot','expiration']
+        model = Post
+        fields = [
+        'post_id',
+        'body','image',
+        'expiration',
+        'author',
+        'likes',
+        'num_likes',
+        'num_dislikes',
+        'dislikes',
+        'created_on',
+        'tags']
 
-class UpvoteSerializer(serializers.ModelSerializer):
-   
-    class Meta:
-        model =Upvote
-        fields =['post','user']
-   
-  
+    def get_num_likes(self,obj):
+     return obj.get_number_of_likes()
+    def get_num_dislikes(self,obj):
+     return obj.get_number_of_dislikes()
 
-class DownvoteSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model =Upvote
-        fields =['post','user']
+        model =UserProfile
+        fields ='__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model =Comment
+        fields ='__all__'
+
