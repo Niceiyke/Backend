@@ -29,6 +29,11 @@ class MyTokenObtainPairView(TokenObtainPairView):
 class RegisterView(GenericAPIView):
     serializer_class=AccountSerializer
 
+    def get(self,request:Request):
+
+        return Response({"register":"register"})
+
+
     def post(self,request:Request):
         data =request.data
 
