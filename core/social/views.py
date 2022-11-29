@@ -16,6 +16,10 @@ from django.views.generic.edit import UpdateView, DeleteView
 class PostListView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         logged_in_user = request.user
+<<<<<<< HEAD
+=======
+        print(logged_in_user)
+>>>>>>> f9512b2af47cb6aa872667f577b79fe952d382ce
         posts = Post.objects.filter(
             author=logged_in_user.id
         )
