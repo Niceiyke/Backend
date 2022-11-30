@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -45,6 +46,7 @@ class Post(models.Model):
     comments =models.ManyToManyField('Comment',blank=True,related_name='comments',)
 
 
+
     class Meta:
         ordering=['-created_on','-shared_on']
 
@@ -87,6 +89,10 @@ class Post(models.Model):
         author_picture = self.author.profile.picture
         print(author_picture)
         return author_picture
+
+    def get_absolute_url(self):
+        return reverse('social:post-detail',args=[self.post_id])
+
 
 class Comment(models.Model):
     comment = models.TextField()

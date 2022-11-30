@@ -38,11 +38,13 @@ class PostSerializer(serializers.ModelSerializer):
     author_picture = serializers.SerializerMethodField(read_only=True)
     author_name = serializers.SerializerMethodField(read_only=True)
     author_email = serializers.SerializerMethodField(read_only=True)
+    url= serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Post
         fields = [
         'post_id',
+        'url',
         'body',
         'image',
         'expiration',
@@ -67,6 +69,8 @@ class PostSerializer(serializers.ModelSerializer):
         return str(obj.author.profile.first_name)
     def get_author_email(self,obj):
         return str(obj.author.profile.user.email)
+    def get_url(self,obj):
+        return obj.get_absolute_url()
 
 class UserProfileSerializer(serializers.ModelSerializer):
 

@@ -125,7 +125,7 @@ class AddLikeView(APIView):
     
         return Response({"message": "logged"},status=status.HTTP_200_OK)
 
-    def post(self, request, pk, *args, **kwargs):
+    def post(self, request,pk, *args, **kwargs):
         post = Post.objects.get(post_id=pk)
 
         is_dislike = False

@@ -3,6 +3,8 @@ from .views import (PostListView, PostDetailView, PostEditView, PostDeleteView, 
     ProfileEditView, AddFollower, RemoveFollower, AddLike, AddDislike, UserSearch, ListFollowers, AddCommentLike, AddCommentDislike, CommentReplyView, PostNotification, FollowNotification,
      ThreadNotification, RemoveNotification, CreateThread, ListThreads, ThreadView, CreateMessage, SharedPostView)
 
+app_name ='social'
+
 urlpatterns = [
     path('', PostListView.as_view(), name='post-list'),
     path('post/<str:pk>/', PostDetailView.as_view(), name='post-detail'),
