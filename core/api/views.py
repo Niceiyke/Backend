@@ -64,10 +64,6 @@ class PostListCreateView(ListCreateAPIView):
 
 
     def  perform_create(self, serializer):
-<<<<<<< HEAD
-=======
-       print('user',self.request.user)
->>>>>>> f9512b2af47cb6aa872667f577b79fe952d382ce
        serializer.save(author=self.request.user)
 
 class PostRetriveUpdateDeletView(RetrieveUpdateDestroyAPIView):

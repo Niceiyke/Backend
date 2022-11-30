@@ -34,11 +34,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     "corsheaders",
-<<<<<<< HEAD
-
-=======
     'crispy_forms',
->>>>>>> f9512b2af47cb6aa872667f577b79fe952d382ce
 ]
 
 MIDDLEWARE = [

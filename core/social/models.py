@@ -83,6 +83,11 @@ class Post(models.Model):
         number_of_dislikes = self.dislikes.count()
         return number_of_dislikes
 
+    def get_author_picture(self):
+        author_picture = self.author.profile.picture
+        print(author_picture)
+        return author_picture
+
 class Comment(models.Model):
     comment = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)

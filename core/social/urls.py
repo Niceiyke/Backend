@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import PostListView, PostDetailView, PostEditView, PostDeleteView, CommentDeleteView, ProfileView, ProfileEditView, AddFollower, RemoveFollower, AddLike, AddDislike, UserSearch, ListFollowers, AddCommentLike, AddCommentDislike, CommentReplyView, PostNotification, FollowNotification, ThreadNotification, RemoveNotification, CreateThread, ListThreads, ThreadView, CreateMessage, SharedPostView
+from .views import (PostListView, PostDetailView, PostEditView, PostDeleteView, CommentDeleteView, ProfileView, 
+    ProfileEditView, AddFollower, RemoveFollower, AddLike, AddDislike, UserSearch, ListFollowers, AddCommentLike, AddCommentDislike, CommentReplyView, PostNotification, FollowNotification,
+     ThreadNotification, RemoveNotification, CreateThread, ListThreads, ThreadView, CreateMessage, SharedPostView)
 
 urlpatterns = [
     path('', PostListView.as_view(), name='post-list'),

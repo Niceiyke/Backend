@@ -16,14 +16,12 @@ from django.views.generic.edit import UpdateView, DeleteView
 class PostListView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         logged_in_user = request.user
-<<<<<<< HEAD
-=======
-        print(logged_in_user)
->>>>>>> f9512b2af47cb6aa872667f577b79fe952d382ce
         posts = Post.objects.filter(
             author=logged_in_user.id
         )
         print('post:',posts)
+        
+        
         form = PostForm()
         share_form = ShareForm()
 
@@ -71,6 +69,8 @@ class PostDetailView(LoginRequiredMixin, View):
         print(pk)
         post = Post.objects.get(post_id=pk)
         form = CommentForm()
+        print(post.author.profile.picture)
+      
 
         comments = Comment.objects.filter(post=post)
 

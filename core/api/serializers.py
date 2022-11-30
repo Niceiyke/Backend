@@ -35,14 +35,21 @@ class AccountSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     num_likes =serializers.SerializerMethodField(read_only=True)
     num_dislikes  =serializers.SerializerMethodField(read_only=True)
+    author_picture = serializers.SerializerMethodField(read_only=True)
+    author_name = serializers.SerializerMethodField(read_only=True)
+    author_email = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Post
         fields = [
         'post_id',
-        'body','image',
+        'body',
+        'image',
         'expiration',
         'author',
+        'author_name',
+        'author_email',
+        'author_picture',
         'likes',
         'num_likes',
         'num_dislikes',
@@ -54,6 +61,12 @@ class PostSerializer(serializers.ModelSerializer):
      return obj.get_number_of_likes()
     def get_num_dislikes(self,obj):
      return obj.get_number_of_dislikes()
+    def get_author_picture(self,obj):
+        return str(obj.author.profile.picture)
+    def get_author_name(self,obj):
+        return str(obj.author.profile.first_name)
+    def get_author_email(self,obj):
+        return str(obj.author.profile.user.email)
 
 class UserProfileSerializer(serializers.ModelSerializer):
 
