@@ -13,6 +13,7 @@ class MyUUIDModel(models.Model):
 	# other fields
 User= get_user_model()
 
+
 class UserProfile(models.Model):
     user=models.OneToOneField(User, primary_key=True, verbose_name='user', related_name='profile', on_delete=models.CASCADE)
     first_name =models.CharField(max_length=20, blank=True, null=True)
@@ -33,7 +34,7 @@ class Post(models.Model):
     post_id =models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     author =models.ForeignKey(User,on_delete=models.CASCADE)
     body =models.CharField(max_length=240)
-    image = models.ManyToManyField('Image', blank=True)
+    image = models.ImageField(upload_to='uploads/post_photos', blank=True, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on= models.DateTimeField(auto_now=True)
     likes =models.ManyToManyField(User,blank=True,related_name='likes',)
@@ -92,6 +93,14 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('social:post-detail',args=[self.post_id])
+
+
+class Image(models.Model):
+    image_id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    image = models.ImageField(upload_to='uploads/post_photos', blank=True, null=True)
+    post = models.ForeignKey(Post,on_delete=models.CASCADE ,related_name='images',blank=True,null=True)
+
+   
 
 
 class Comment(models.Model):
@@ -193,8 +202,6 @@ class MessageModel(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 	is_read = models.BooleanField(default=False)
 
-class Image(models.Model):
-	image = models.ImageField(upload_to='uploads/post_photos', blank=True, null=True)
 
 class Tag(models.Model):
 	name = models.CharField(max_length=255)

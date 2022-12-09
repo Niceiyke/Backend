@@ -3,7 +3,7 @@ from rest_framework import serializers
 from account.models import CustomUser
 from rest_framework.validators import ValidationError
 from rest_framework.authtoken.models import Token
-from social.models import Post,UserProfile,Comment
+from social.models import Post,UserProfile,Comment,Image
 
 class AccountSerializer(serializers.ModelSerializer):
     email =serializers.CharField(max_length=50)
@@ -32,6 +32,12 @@ class AccountSerializer(serializers.ModelSerializer):
 
         return user
 
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =Image
+        fields =['image','post']
+
+
 class PostSerializer(serializers.ModelSerializer):
     num_likes =serializers.SerializerMethodField(read_only=True)
     num_dislikes  =serializers.SerializerMethodField(read_only=True)
@@ -39,6 +45,10 @@ class PostSerializer(serializers.ModelSerializer):
     author_name = serializers.SerializerMethodField(read_only=True)
     author_email = serializers.SerializerMethodField(read_only=True)
     url= serializers.SerializerMethodField(read_only=True)
+    images =ImageSerializer(many=True,read_only=True) 
+    uploaded_images=serializers.ListField(
+        child=serializers.ImageField(max_length=1000000,allow_empty_file=False,use_url=False,),write_only=True
+    )
 
     class Meta:
         model = Post
@@ -46,10 +56,11 @@ class PostSerializer(serializers.ModelSerializer):
         'post_id',
         'url',
         'body',
-        'image',
         'expiration',
         'author',
         'author_name',
+        'images',
+        'uploaded_images',
         'author_email',
         'author_picture',
         'likes',
@@ -71,6 +82,21 @@ class PostSerializer(serializers.ModelSerializer):
         return str(obj.author.profile.user.email)
     def get_url(self,obj):
         return obj.get_absolute_url()
+
+
+    def create(self, validated_data):
+        request =self.context.get('request')
+        user=request.user
+        uploaded_images =validated_data.pop("uploaded_images")
+        post =Post.objects.create(body=validated_data['body'],author=user)
+        for image in uploaded_images:
+            Image.objects.create(post =post,image=image)
+        
+        return post
+
+
+
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
 

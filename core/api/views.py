@@ -1,5 +1,6 @@
-from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView,GenericAPIView
+from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView,GenericAPIView,CreateAPIView
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.response import Response
@@ -63,8 +64,15 @@ class PostListCreateView(ListCreateAPIView):
     serializer_class =PostSerializer
 
 
-    def  perform_create(self, serializer):
-       serializer.save(author=self.request.user)
+    # def  perform_create(self, serializer):
+    #  #   uploaded_images =serializer.pop("uploaded_images")
+    #     post =Post.objects.create(**serializer)
+    #     serializer.save(author=self.request.user)
+    #   #  print('upl',uploaded_images)
+    #     print('p',post)
+    #     return post
+       
+       
 
 class PostRetriveUpdateDeletView(RetrieveUpdateDestroyAPIView):
     queryset=Post.objects.all()
@@ -260,6 +268,38 @@ class AddCommentDisLikeView(APIView):
         data =comment.dislikes.count()
 
         return Response({'dislikes:',data},status=status.HTTP_200_OK)
+
+class AddImageView(APIView):
+
+    parser_classes =(MultiPartParser, FormParser)
+ 
+
+
+
+    def post(self, request,pk, format=None):
+        images =request.FILES.getlist('image[]')
+        print('data',request.data['name'])
+        name= request.data['name']
+        post = Post.objects.get(post_id=pk)
+
+        print(name)
+
+        
+        for image in images:
+            print('image',image)
+            img=Image(image=image,host=post,name=name)
+            img.save()
+            #img=Image.objects.all().last()
+            print(img)
+
+            post.image.add(img)
+
+        post.save()
+   
+
+        return Response({'received data':' done'})
+
+
     
 
 class AddFollowerView(APIView):

@@ -1,11 +1,14 @@
 from django.urls import path
+
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from .views import RegisterView,MyTokenObtainPairView,PostListCreateView,PostRetriveUpdateDeletView,UserProfileView,CommentView,SingleCommentView,AddLikeView,AddDisLikeView,AddFollowerView,RemoveFollowerView,AddCommentLikeView,AddCommentDisLikeView
+from .views import (RegisterView,MyTokenObtainPairView,PostListCreateView,
+PostRetriveUpdateDeletView,UserProfileView,CommentView,SingleCommentView,AddLikeView,
+AddDisLikeView,AddFollowerView,RemoveFollowerView,AddCommentLikeView,AddCommentDisLikeView,AddImageView
 
-
+)
 
 urlpatterns = [
 
@@ -23,6 +26,7 @@ urlpatterns = [
  path('post/comment/<str:post_pk>/<int:pk>',SingleCommentView.as_view(),name='single-comment'),
  path('post/<str:pk>/like/', AddLikeView.as_view(), name='post-like'),
  path('post/<str:pk>/dislike/', AddDisLikeView.as_view(), name='post-dislike'),
+ path('post/<str:pk>/image/', AddImageView.as_view(), name='post-image'),
  path('post/comment/<str:post_pk>/<int:pk>/like',AddCommentLikeView.as_view(),name='like-comment'),
  path('post/comment/<str:post_pk>/<int:pk>/dislike',AddCommentDisLikeView.as_view(),name='dislike-comment'),
 
